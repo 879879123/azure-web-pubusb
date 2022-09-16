@@ -22,7 +22,6 @@
     ]
   },
   "portable": {
-    "splashImage": "dist/assets/icons/electron.bmp",
     "artifactName": "azure_web_pubsub.exe"
   },
   "mac": {
