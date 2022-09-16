@@ -4,7 +4,7 @@ COPY package-lock.json ./
 RUN npm install && mkdir /usr/src/app && mv ./node_modules /usr/src/app
 WORKDIR /usr/src/app
 COPY . .
-RUN npm run build:prod
+RUN npm run web:build
 FROM nginx:1.23.1-alpine AS runtime-image
 COPY nginx/default.conf /etc/nginx/conf.d/
 RUN rm -rf /usr/share/nginx/html/*
