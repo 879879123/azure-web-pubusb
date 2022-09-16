@@ -1,0 +1,49 @@
+<div class="publish-message-container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+    <mat-form-field class="chip-list" appearance="outline">
+      <mat-label>Select Group</mat-label>
+      <mat-chip-list #chipList aria-label="selection" formArrayName="selected">
+        <mat-chip
+          *ngFor="let group of form.controls['selected'].value; let i = index"
+          (removed)="remove(group)"
+        >
+          {{ group.groupName }}
+
+          <button matChipRemove class="remove-button">
+            <i class="material-icons icon">cancel</i>
+          </button>
+        </mat-chip>
+        <input
+          #groupInput
+          placeholder="Select Group..."
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [disabled]="!isConnected"
+        />
+      </mat-chip-list>
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="selectedGroup($event)"
+      >
+        <mat-option *ngFor="let group of groups" [value]="group">
+          {{ group.groupName }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field class="publish-input" appearance="outline">
+      <mat-label>Message</mat-label>
+      <input matInput formControlName="message" [readonly]="!isConnected" />
+      <!-- <textarea
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        formControlName="message"
+        [readonly]="!isConnected"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="1"
+        (keydown.enter)="$event.preventDefault()"
+      ></textarea> -->
+    </mat-form-field>
+    <button type="submit" style="display: none"></button>
+  </form>
+</div>

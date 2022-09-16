@@ -1,0 +1,25 @@
+<div  fxLayout="column" fxLayoutGap="10px" [style.padding.px]="12" fxLayoutAlign="center center">
+  <mat-card fxFlexFill>
+    <app-connection-bar
+      (connectionData)="isConnectPubSub($event)"
+      (isDisconnect)="isDisconnect($event)"
+      [isConnected]="isConnected"
+    ></app-connection-bar>
+    <app-group-bar
+      (joinGroup)="joinGroup($event)"
+      (leaveGroup)="leaveGroup($event)"
+      [isConnected]="isConnected"
+      [groups]="group"
+    ></app-group-bar>
+  </mat-card>
+  <mat-card fxFlexFill>
+    <app-message-list [logs]="logs"></app-message-list>
+  </mat-card>
+  <mat-card fxFlexFill>
+    <app-publish-message-bar
+      (publishMessage)="publishMessage($event)"
+      [groups]="group"
+      [isConnected]="isConnected"
+    ></app-publish-message-bar
+  ></mat-card>
+</div>

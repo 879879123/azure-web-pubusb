@@ -1,0 +1,70 @@
+<div class="connection-bar-container">
+  <form [formGroup]="form">
+    <!-- <div class="key-input">
+      <input
+        class="form-control"
+        type="text"
+        placeholder="Key"
+        formControlName="key"
+      />
+    </div> -->
+    <mat-form-field class="connectio-string-input" appearance="outline">
+      <mat-label>Connection String</mat-label>
+      <input
+        matInput
+        placeholder="Connection String"
+        formControlName="connectionString"
+        [readonly]="isConnected"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="hub-name-input" appearance="outline">
+      <mat-label>Hubname</mat-label>
+      <input
+        matInput
+        placeholder="Hubname"
+        formControlName="hubname"
+        [readonly]="isConnected"
+      />
+    </mat-form-field>
+    <!-- <div class="connectio-string-input">
+      <input
+        class="form-control"
+        type="text"
+        placeholder="Connection String"
+        formControlName="connectionString"
+        [readonly]="isConnected"
+      />
+    </div>
+    <div class="hub-name-input">
+      <input
+        class="form-control"
+        type="text"
+        placeholder="Hubname"
+        formControlName="hubname"
+        [readonly]="isConnected"
+      />
+    </div> -->
+    <div class="connect-button">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="!isConnected; else disconnect"
+        (click)="onSubmit()"
+      >
+        Connect
+      </button>
+    </div>
+  </form>
+</div>
+
+<ng-template #disconnect>
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="onDisconnect()"
+  >
+    Disconnect
+  </button>
+</ng-template>

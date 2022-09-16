@@ -1,0 +1,21 @@
+<div class="group-bar-container">
+  <mat-form-field class="chip-list" appearance="outline">
+    <mat-label>Groups</mat-label>
+    <mat-chip-list #chipList aria-label="selection">
+      <mat-chip *ngFor="let group of groups" (removed)="remove(group)">
+        {{ group.groupName }}
+        <button matChipRemove class="remove-button">
+          <i class="material-icons icon">cancel</i>
+        </button>
+      </mat-chip>
+      <input
+        [disabled]="!isConnected"
+        placeholder="Join New Group..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+</div>

@@ -1,0 +1,16 @@
+.websocket-console {
+    overflow-y: scroll;
+    height: 250px;
+    width: 100%;
+    box-shadow: border-box;
+    background-color: #000;
+    pre {
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      font-family: monospace, serif;
+      font-size: 1em;
+      margin: 0;
+      padding: 5px;
+      color: #fafafa;
+    }
+  }
