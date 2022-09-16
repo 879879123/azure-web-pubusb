@@ -1,21 +1,14 @@
 // @ts-nocheck
-import {app, BrowserWindow, screen} from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
+import { BrowserView } from 'electron/main';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
-  serve = args.some(val => val === '--serve');
+  serve = args.some((val) => val === '--serve');
 
 function createWindow(): BrowserWindow {
-  // const preLoadingWindow = new BrowserWindow({
-  //   show: true
-  // });
-
-  // preLoadingWindow.webContents.once('did-finish-load', () =>{
-  //   preLoadingWindow.close();
-  //   win.show();
-  // })
 
   const size = screen.getPrimaryDisplay().workAreaSize;
 
@@ -25,16 +18,46 @@ function createWindow(): BrowserWindow {
     y: 0,
     width: 1000,
     height: 800,
-    resizable: false,
+    resizable: true,
     darkTheme: true,
     autoHideMenuBar: true,
     icon: path.join(__dirname, 'electron.ico'),
     webPreferences: {
       nodeIntegration: true,
-      allowRunningInsecureContent: (serve),
-      contextIsolation: false,  // false if you want to run e2e test with Spectron
+      allowRunningInsecureContent: serve,
+      contextIsolation: false, // false if you want to run e2e test with Spectron
     },
   });
+
+  // const view = new BrowserView();
+  // win.setBrowserView(view);
+  // view.setBounds({
+  //   x: 0,
+  //   y: 250,
+  //   width: win.getBounds().width,
+  //   height: win.getBounds().height - 250,
+  // });
+  // view.setAutoResize({ horizontal: true, vertical: true });
+  // view.webContents.loadURL(url);
+  // const mainScreen = screen.getPrimaryDisplay();
+  // win.on('resize', function () {
+  //   view.setBounds({
+  //     x: 0,
+  //     y: 250,
+  //     width: win.getBounds().width,
+  //     height: win.getBounds().height - 250,
+  //   });
+  //   console.log('resize');
+  //   if (win.isMaximized() || win.isFullScreen()) {
+  //     win.setSize(mainScreen.workArea.width, mainScreen.workArea.height);
+  //     view.setBounds({
+  //       x: 0,
+  //       y: 250,
+  //       width: mainScreen.workArea.width,
+  //       height: mainScreen.workArea.height - 250,
+  //     });
+  //   }
+  // });
 
   if (serve) {
     const debug = require('electron-debug');
@@ -47,7 +70,7 @@ function createWindow(): BrowserWindow {
     let pathIndex = './index.html';
 
     if (fs.existsSync(path.join(__dirname, '../dist/index.html'))) {
-       // Path when running electron in local folder
+      // Path when running electron in local folder
       pathIndex = '../dist/index.html';
     }
 
@@ -89,7 +112,6 @@ try {
       createWindow();
     }
   });
-
 } catch (e) {
   // Catch Error
   // throw e;
