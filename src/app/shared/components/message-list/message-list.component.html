@@ -1,7 +1,15 @@
+<div class="trigger-wrapper">
+  <button mat-button [matMenuTriggerFor]="menu" class="material-icons menu">more_vert</button>
+</div>
 <div class="websocket-console" #console>
   <ng-container *ngFor="let log of datas.slice().reverse()">
     <pre style="word-wrap: break-word">{{ log?.message }}</pre>
-    <pre style="word-wrap: break-word" *ngIf="log?.json">{{ log?.json | json }}</pre>
-    <!-- <pre style="word-wrap: break-word" *ngIf="log?.text">{{ log?.text }}</pre> -->
+    <pre style="word-wrap: break-word" *ngIf="log?.json">{{
+      log?.json | json
+    }}</pre>
   </ng-container>
 </div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onExportExcel()">Export Excel</button>
+</mat-menu>

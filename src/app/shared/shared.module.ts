@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatMenuModule } from '@angular/material/menu';
 import { MessageListComponent } from './components/message-list/message-list.component';
 
 @NgModule({
@@ -42,6 +43,7 @@ import { MessageListComponent } from './components/message-list/message-list.com
     MatAutocompleteModule,
     MatCardModule,
     FlexLayoutModule,
+    MatMenuModule,
   ],
   exports: [
     TranslateModule,
@@ -50,7 +52,7 @@ import { MessageListComponent } from './components/message-list/message-list.com
     ConnectionBarComponent,
     GroupBarComponent,
     PublishMessageBarComponent,
-    MessageListComponent
+    MessageListComponent,
   ],
 })
 export class SharedModule {}

@@ -1,4 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver'; 
 
 @Component({
   selector: 'app-message-list',
@@ -16,44 +18,20 @@ export class MessageListComponent implements OnInit, OnChanges {
     this.logs.subscribe((log) => {
       this.datas.push(log);
     });
+  }
 
-    // this.logs.subscribe(res => console.log(res));
-    // this.logs
-    //   .pipe(
-    //     map((log: any) => {
-    //       console.log(log);
-    //       switch (log?.type) {
-    //         case 'system':
-    //           // const {
-    //           //   type,
-    //           //   event,
-    //           //   message
-    //           // } = log || {} as SystemLog;
-    //           console.log(
-    //             `type: ${log.type} event: ${log.event} userId: ${log.userId} connectionId ${log.connectionId}`
-    //           );
-    //           return;
-    //         case 'message':
-    //           // const {
-    //           //   type,
-    //           //   group,
-    //           //   fromUserId,
-    //           //   from,
-    //           //   dataType ,
-    //           //   data
-    //           // } = log || {} as MessageLog;
-    //           console.log(
-    //             `type: ${log.type} group: ${log.group} fromUserId: ${log.fromUserId} from ${log.from} dataType ${log.dataType} data ${log.data}`
-    //           );
-    //           return;
-    //         case 'ack':
-    //           console.log(
-    //             `type: ${log.type} ackId: ${log.ackId} success: ${log.success} error: ${log?.error?.name} message: ${log?.error?.message}`
-    //           );
-    //           return;
-    //       }
-    //     })
-    //   )
-    //   .subscribe();
+  onExportExcel() {
+
+    const json = this.datas.filter(data => data);
+   
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+  
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([excelBuffer], {
+      type: EXCEL_TYPE
+    });
+    FileSaver.saveAs(data, 'logs' + '_export_' + new Date().getTime() + '.xlsx');
   }
 }
