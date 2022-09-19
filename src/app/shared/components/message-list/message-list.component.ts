@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-message-list',
@@ -15,13 +16,13 @@ export class MessageListComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges() {
-    this.logs.subscribe((log) => {
-      this.datas.push(log);
-    });
+    this.logs.pipe(tap((log) => this.datas.push(log))).subscribe();
   }
 
-  onExportExcel() {
+  exportExcel() {
     const json = this.datas.filter((data) => data);
+    if (json?.length <= 0) return;
+
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = {
       Sheets: { data: worksheet },
@@ -31,6 +32,7 @@ export class MessageListComponent implements OnInit, OnChanges {
       bookType: 'xlsx',
       type: 'array',
     });
+
     const EXCEL_TYPE =
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const data: Blob = new Blob([excelBuffer], {
