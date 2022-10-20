@@ -13,7 +13,7 @@ export class WebsocketConnectionService {
 
   public connect(url?): Subject<MessageEvent> {
     if (url) {
-      this.subject = this.create(url);
+      this.subject = this._create(url);
       this.connected$.next(true);
     }
     return this.subject;
@@ -29,7 +29,7 @@ export class WebsocketConnectionService {
     }
   }
 
-  private create(url): Subject<MessageEvent> {
+  private _create(url): Subject<MessageEvent> {
     this.ws = new WebSocket(url, 'json.webpubsub.azure.v1');
 
     let observable = new Observable((obs: Observer<MessageEvent>) => {

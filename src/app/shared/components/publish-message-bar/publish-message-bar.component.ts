@@ -11,7 +11,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { Group } from '../../../home/home.component';
 import * as _ from 'lodash';
 import { ElementRef } from '@angular/core';
@@ -30,8 +29,8 @@ export class PublishMessageBarComponent implements OnInit, OnChanges {
   form: FormGroup;
   selected: FormArray;
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
+  constructor(private _fb: FormBuilder) {
+    this.form = this._fb.group({
       message: ['', Validators.required],
       selected: new FormArray([]),
     });
@@ -56,7 +55,7 @@ export class PublishMessageBarComponent implements OnInit, OnChanges {
     //     );
     //   }
     // }
-   
+
     console.table(this.form.getRawValue());
   }
 
@@ -79,7 +78,7 @@ export class PublishMessageBarComponent implements OnInit, OnChanges {
   }
 
   selectedGroup(event: MatAutocompleteSelectedEvent) {
-    if (event.option.viewValue) {
+    if (event?.option?.viewValue) {
       const data = _.find(this.groups, { groupName: event.option.viewValue });
       const duplicate = (this.form.get('selected') as FormArray)
         .getRawValue()

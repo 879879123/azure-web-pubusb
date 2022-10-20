@@ -50,8 +50,8 @@ export class HomeComponent implements OnInit {
   group: Array<Group> = [];
   logs = new BehaviorSubject(null);
   requests = [];
-  constructor(private websocketConnectionService: WebsocketConnectionService) {
-    this.websocketConnectionService.connected$.subscribe((status: boolean) => {
+  constructor(private _websocketConnectionService: WebsocketConnectionService) {
+    this._websocketConnectionService.connected$.subscribe((status: boolean) => {
       if (status) {
         this.isConnected = true;
       } else {
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
         message: `[${moment().toISOString()}] Client WebSocket opened.`,
       });
       this.messages = <Subject<any>>(
-        this.websocketConnectionService.connect(clientData.url).pipe(
+        this._websocketConnectionService.connect(clientData.url).pipe(
           map((response) => {
             return response.data;
           })
@@ -85,19 +85,19 @@ export class HomeComponent implements OnInit {
         .pipe(
           map((res) => JSON.parse(res)),
           tap((res) => {
-            console.log(`-------------debug 2---------------`);
+            console.log(`-------------websocket response---------------`);
             console.log(res);
-            console.log(`-------------debug 2---------------`);
+            console.log(`-------------websocket response---------------`);
             if (res?.type === 'system') {
               if (res.event === 'connected') {
                 const { connectionId } = res;
-                this.websocketConnectionService.connected$.next(true);
+                this._websocketConnectionService.connected$.next(true);
                 this.logs.next({
                   ...this.logs.getValue(),
                   message: `[${moment().toISOString()}] ConnectionID: ${connectionId} connected.`,
                 });
               } else if (res.event === 'disconnected') {
-                this.websocketConnectionService.connected$.next(false);
+                this._websocketConnectionService.connected$.next(false);
                 this.logs.next({
                   ...this.logs.getValue(),
                   message: `[${moment().toISOString()}] webSocket disconnected ${
@@ -115,23 +115,19 @@ export class HomeComponent implements OnInit {
                 this.logs.next({
                   ...this.logs.getValue(),
                   message: `[${moment().toISOString()}] [From ${from}] ${group}: `,
-                  json
+                  json,
                 });
-              }
-              catch(e){
+              } catch (e) {
                 const text = data;
                 this.logs.next({
                   ...this.logs.getValue(),
                   message: `[${moment().toISOString()}] [From ${from}] ${group}: ${text}`,
                 });
               }
-           
-          
             }
 
             if (res?.type === 'ack') {
               const { ackId, success } = res;
-
               const index = _.findIndex(this.group, { ackId: ackId });
 
               if (index >= 0) {
@@ -142,13 +138,6 @@ export class HomeComponent implements OnInit {
 
               if (requestIndex >= 0) {
                 const { type } = this.requests[requestIndex];
-                // if (type === 'sendToGroup') {
-                //   const { group, ackId } = this.requests[requestIndex];
-                //   this.logs.next({
-                //     message: `sending message to group ${group}(ackId=${ackId}) succeeded`,
-                //   });
-                // }
-
                 if (type === 'joinGroup') {
                   const { group, ackId } = this.requests[requestIndex];
                   this.logs.next({
@@ -156,7 +145,6 @@ export class HomeComponent implements OnInit {
                     message: `[${moment().toISOString()}] Joining group ${group}(ackId=${ackId}) succeeded.`,
                   });
                 }
-
                 if (type === 'leaveGroup') {
                   const { group, ackId } = this.requests[requestIndex];
                   this.logs.next({
@@ -170,9 +158,10 @@ export class HomeComponent implements OnInit {
             }
           })
         )
+        // @ts-ignore
         .subscribe(
-          () => {},
-          (error) => {
+          (result?: any) => {},
+          (error?: any) => {
             console.table(error);
           }
         );
@@ -277,10 +266,10 @@ export class HomeComponent implements OnInit {
 
   isDisconnect(event) {
     if (event) {
-      of(this.websocketConnectionService.disconnect())
+      of(this._websocketConnectionService.disconnect())
         .pipe(
           tap(() => {
-            this.websocketConnectionService.connected$.next(false);
+            this._websocketConnectionService.connected$.next(false);
             this.group = [];
             this.logs.next({
               ...this.logs.getValue(),

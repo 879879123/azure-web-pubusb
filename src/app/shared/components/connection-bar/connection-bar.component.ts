@@ -11,8 +11,8 @@ export class ConnectionBarComponent implements OnInit {
   @Output() connectionData = new EventEmitter<any>();
   @Output() isDisconnect = new EventEmitter<any>();
   form: FormGroup;
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
+  constructor(private _fb: FormBuilder) {
+    this.form = this._fb.group({
       connectionString: ['', Validators.required],
       hubname: ['arcs', Validators.required],
     });
